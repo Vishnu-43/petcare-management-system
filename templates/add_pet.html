@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Pet - PetCare</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1b5e20;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🐾 Add Your Pet</h1>
+
+    <p class="subtitle">
+        Add your pet's information to your PetCare profile.
+    </p>
+
+    <form method="POST">
+
+        <div class="form-group">
+
+            <label for="name">
+                Pet Name
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="e.g. Bruno"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="species">
+                Species
+            </label>
+
+            <select id="species" name="species" required>
+
+                <option value="">
+                    Select species
+                </option>
+
+                <option value="Dog">
+                    🐕 Dog
+                </option>
+
+                <option value="Cat">
+                    🐈 Cat
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="breed">
+                Breed
+            </label>
+
+            <input
+                type="text"
+                id="breed"
+                name="breed"
+                placeholder="e.g. Golden Retriever"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="gender">
+                Gender
+            </label>
+
+            <select id="gender" name="gender">
+
+                <option value="">
+                    Select gender
+                </option>
+
+                <option value="Male">
+                    Male
+                </option>
+
+                <option value="Female">
+                    Female
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="date_of_birth">
+                Date of Birth
+            </label>
+
+            <input
+                type="date"
+                id="date_of_birth"
+                name="date_of_birth"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="weight">
+                Weight (kg)
+            </label>
+
+            <input
+                type="number"
+                id="weight"
+                name="weight"
+                step="0.1"
+                min="0"
+                placeholder="e.g. 12.5"
+            >
+
+        </div>
+
+
+        <button type="submit">
+            Add Pet
+        </button>
+
+    </form>
+
+
+    <a
+        href="{{ url_for('dashboard') }}"
+        class="back"
+    >
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+
+</html>

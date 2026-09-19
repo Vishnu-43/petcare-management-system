@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>{{ pet.name }} - PetCare</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 18px 30px;
+        }
+
+        .header a {
+            text-decoration: none;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .profile-header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .pet-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .pet-icon {
+            font-size: 55px;
+        }
+
+        .pet-title h1 {
+            font-size: 30px;
+        }
+
+        .pet-title p {
+            color: #777;
+            margin-top: 6px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .info-card {
+            background: #f8faf8;
+            padding: 18px;
+            border-radius: 10px;
+        }
+
+        .info-card span {
+            display: block;
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .info-card strong {
+            font-size: 16px;
+        }
+
+        .modules {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .module {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #eee;
+        }
+
+        .module h2 {
+            margin-bottom: 10px;
+        }
+
+        .module p {
+            color: #777;
+            margin-bottom: 18px;
+        }
+
+        .module button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 7px;
+            background: #2e7d32;
+            color: white;
+            cursor: pointer;
+        }
+
+        @media (max-width: 700px) {
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modules {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<header class="header">
+
+    <a href="{{ url_for('dashboard') }}">
+        ← Back to Dashboard
+    </a>
+
+</header>
+
+
+<div class="container">
+
+
+    <!-- Pet Header -->
+
+    <section class="profile-header">
+
+        <div class="pet-title">
+
+            <div class="pet-icon">
+
+                {% if pet.species == "Dog" %}
+                    🐕
+                {% else %}
+                    🐈
+                {% endif %}
+
+            </div>
+
+            <div>
+
+                <h1>
+                    {{ pet.name }}
+                </h1>
+
+                <p>
+                    {{ pet.species }}
+
+                    {% if pet.breed %}
+                        • {{ pet.breed }}
+                    {% endif %}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Pet Information -->
+
+        <div class="info-grid">
+
+            <div class="info-card">
+
+                <span>
+                    Breed
+                </span>
+
+                <strong>
+                    {{ pet.breed or "Not specified" }}
+                </strong>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <span>
+                    Gender
+                </span>
+
+                <strong>
+                    {{ pet.gender or "Not specified" }}
+                </strong>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <span>
+                    Date of Birth
+                </span>
+
+                <strong>
+                    {{ pet.date_of_birth or "Not specified" }}
+                </strong>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <span>
+                    Weight
+                </span>
+
+                <strong>
+
+                    {% if pet.weight %}
+                        {{ pet.weight }} kg
+                    {% else %}
+                        Not specified
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <span>
+                    Species
+                </span>
+
+                <strong>
+                    {{ pet.species }}
+                </strong>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <span>
+                    Pet ID
+                </span>
+
+                <strong>
+                    #{{ pet.id }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Pet Care Modules -->
+
+    <div class="modules">
+
+
+        <div class="module">
+
+            <h2>
+                💉 Vaccinations
+            </h2>
+
+            <p>
+                Track vaccines and upcoming vaccination dates.
+            </p>
+
+            <a href="{{ url_for('vaccinations', pet_id=pet.id) }}">
+                 <button type="button">
+                      Manage Vaccinations
+                </button>
+            </a>
+        </div>
+
+
+        <div class="module">
+
+            <h2>
+                🏥 Medical Records
+            </h2>
+
+            <p>
+                Keep track of your pet's medical history.
+            </p>
+
+           <a href="{{ url_for('medical_records', pet_id=pet.id) }}">
+                <button type="button">
+                  View Medical Records
+                </button>
+            </a>
+
+        </div>
+
+
+        <div class="module">
+
+            <h2>
+                📅 Appointments
+            </h2>
+
+            <p>
+                Manage veterinary appointments.
+            </p>
+            <a href="{{ url_for('appointments', pet_id=pet.id)}}">
+                <button type="button">
+                 View Appointments
+                 </button>
+            </a>
+
+        </div>
+
+
+        <div class="module">
+
+            <h2>
+                ✂️ Grooming
+            </h2>
+
+            <p>
+                Track grooming schedules and services.
+            </p>
+
+            <button>
+                Manage Grooming
+            </button>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

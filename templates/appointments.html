@@ -1,0 +1,250 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Appointments - {{ pet.name }}</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 40px auto;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            height: 80px;
+            resize: vertical;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 11px 20px;
+            border: none;
+            border-radius: 6px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .appointment {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .appointment strong {
+            color: #333;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            background-color: #e7f3ff;
+            color: #007bff;
+        }
+
+        .empty {
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <a class="back-link" href="{{ url_for('pet_profile', pet_id=pet.id) }}">
+        ← Back to {{ pet.name }}'s Profile
+    </a>
+
+    <h1>Appointments</h1>
+
+    <p>
+        Manage appointments for <strong>{{ pet.name }}</strong>
+    </p>
+
+    <!-- Add Appointment -->
+    <div class="card">
+
+        <h2>Schedule New Appointment</h2>
+
+        <form method="POST">
+
+            <label for="appointment_date">Appointment Date</label>
+            <input
+                type="date"
+                id="appointment_date"
+                name="appointment_date"
+                required
+            >
+
+            <label for="appointment_time">Appointment Time</label>
+            <input
+                type="time"
+                id="appointment_time"
+                name="appointment_time"
+                required
+            >
+
+            <label for="appointment_type">Appointment Type</label>
+            <select
+                id="appointment_type"
+                name="appointment_type"
+                required
+            >
+                <option value="">Select type</option>
+                <option value="Regular Checkup">Regular Checkup</option>
+                <option value="Vaccination">Vaccination</option>
+                <option value="Medical Consultation">Medical Consultation</option>
+                <option value="Dental Checkup">Dental Checkup</option>
+                <option value="Emergency">Emergency</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label for="veterinarian">Veterinarian</label>
+            <input
+                type="text"
+                id="veterinarian"
+                name="veterinarian"
+                placeholder="Enter veterinarian name"
+            >
+
+            <label for="notes">Notes</label>
+            <textarea
+                id="notes"
+                name="notes"
+                placeholder="Additional information..."
+            ></textarea>
+
+            <button type="submit">
+                Schedule Appointment
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- Appointment History -->
+    <div class="card">
+
+        <h2>Appointment History</h2>
+
+        {% if appointments %}
+
+            {% for appointment in appointments %}
+
+                <div class="appointment">
+
+                    <p>
+                        <strong>Date:</strong>
+                        {{ appointment.appointment_date }}
+                    </p>
+
+                    <p>
+                        <strong>Time:</strong>
+                        {{ appointment.appointment_time }}
+                    </p>
+
+                    <p>
+                        <strong>Type:</strong>
+                        {{ appointment.appointment_type }}
+                    </p>
+
+                    {% if appointment.veterinarian %}
+                    <p>
+                        <strong>Veterinarian:</strong>
+                        {{ appointment.veterinarian }}
+                    </p>
+                    {% endif %}
+
+                    {% if appointment.notes %}
+                    <p>
+                        <strong>Notes:</strong>
+                        {{ appointment.notes }}
+                    </p>
+                    {% endif %}
+
+                    <p>
+                        <strong>Status:</strong>
+                        <span class="status">
+                            {{ appointment.status }}
+                        </span>
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p class="empty">
+                No appointments scheduled yet.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>
+```

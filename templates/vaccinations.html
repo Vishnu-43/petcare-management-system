@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Vaccinations - {{ pet.name }}</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        .header {
+            background: white;
+            padding: 18px 30px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .header a {
+            text-decoration: none;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .title-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid #eee;
+        }
+
+        .title-section h1 {
+            margin-bottom: 8px;
+        }
+
+        .title-section p {
+            color: #777;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid #eee;
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        button {
+            padding: 11px 18px;
+            border: none;
+            border-radius: 7px;
+            background: #2e7d32;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #256628;
+        }
+
+        .vaccination {
+            background: #f8faf8;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .vaccination h3 {
+            margin-bottom: 10px;
+        }
+
+        .vaccination p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .empty {
+            color: #777;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <a href="{{ url_for('pet_profile', pet_id=pet.id) }}">
+        ← Back to {{ pet.name }}'s Profile
+    </a>
+
+</header>
+
+
+<div class="container">
+
+    <!-- Page Title -->
+
+    <section class="title-section">
+
+        <h1>💉 Vaccinations</h1>
+
+        <p>
+            Manage vaccination records for {{ pet.name }}.
+        </p>
+
+    </section>
+
+
+    <!-- Add Vaccination -->
+
+    <section class="card">
+
+        <h2>Add Vaccination</h2>
+
+        <form method="POST">
+
+            <div class="form-group">
+
+                <label for="vaccine_name">
+                    Vaccine Name
+                </label>
+
+                <input
+                    type="text"
+                    id="vaccine_name"
+                    name="vaccine_name"
+                    placeholder="Example: Rabies"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="vaccination_date">
+                    Vaccination Date
+                </label>
+
+                <input
+                    type="date"
+                    id="vaccination_date"
+                    name="vaccination_date"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="next_due_date">
+                    Next Due Date
+                </label>
+
+                <input
+                    type="date"
+                    id="next_due_date"
+                    name="next_due_date"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="notes">
+                    Notes
+                </label>
+
+                <textarea
+                    id="notes"
+                    name="notes"
+                    placeholder="Additional information..."
+                ></textarea>
+
+            </div>
+
+
+            <button type="submit">
+                Add Vaccination
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- Vaccination History -->
+
+    <section class="card">
+
+        <h2>Vaccination History</h2>
+
+
+        {% if vaccinations %}
+
+            {% for vaccination in vaccinations %}
+
+                <div class="vaccination">
+
+                    <h3>
+                        💉 {{ vaccination.vaccine_name }}
+                    </h3>
+
+                    <p>
+                        <strong>Vaccination Date:</strong>
+                        {{ vaccination.vaccination_date }}
+                    </p>
+
+                    <p>
+                        <strong>Next Due Date:</strong>
+
+                        {{ vaccination.next_due_date or "Not specified" }}
+
+                    </p>
+
+                    {% if vaccination.notes %}
+
+                        <p>
+                            <strong>Notes:</strong>
+                            {{ vaccination.notes }}
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty">
+
+                No vaccination records found for {{ pet.name }}.
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+</body>
+
+</html>

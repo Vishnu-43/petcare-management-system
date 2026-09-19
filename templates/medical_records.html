@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Medical Records - {{ pet.name }}</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        .header {
+            background: white;
+            padding: 18px 30px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .header a {
+            text-decoration: none;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .title-section,
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid #eee;
+            margin-bottom: 25px;
+        }
+
+        .title-section h1 {
+            margin-bottom: 8px;
+        }
+
+        .title-section p {
+            color: #777;
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        button {
+            padding: 11px 18px;
+            border: none;
+            border-radius: 7px;
+            background: #2e7d32;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #256628;
+        }
+
+        .record {
+            background: #f8faf8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .record h3 {
+            margin-bottom: 12px;
+        }
+
+        .record p {
+            margin: 7px 0;
+            color: #555;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <a href="{{ url_for('pet_profile', pet_id=pet.id) }}">
+        ← Back to {{ pet.name }}'s Profile
+    </a>
+
+</header>
+
+
+<div class="container">
+
+    <!-- Page Title -->
+
+    <section class="title-section">
+
+        <h1>🏥 Medical Records</h1>
+
+        <p>
+            Manage medical history and veterinary records for {{ pet.name }}.
+        </p>
+
+    </section>
+
+
+    <!-- Add Medical Record -->
+
+    <section class="card">
+
+        <h2>Add Medical Record</h2>
+
+        <form method="POST">
+
+            <div class="form-group">
+
+                <label for="visit_date">
+                    Visit Date
+                </label>
+
+                <input
+                    type="date"
+                    id="visit_date"
+                    name="visit_date"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="diagnosis">
+                    Diagnosis
+                </label>
+
+                <input
+                    type="text"
+                    id="diagnosis"
+                    name="diagnosis"
+                    placeholder="Example: Fever"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="treatment">
+                    Treatment
+                </label>
+
+                <textarea
+                    id="treatment"
+                    name="treatment"
+                    placeholder="Enter treatment details..."
+                ></textarea>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="veterinarian">
+                    Veterinarian
+                </label>
+
+                <input
+                    type="text"
+                    id="veterinarian"
+                    name="veterinarian"
+                    placeholder="Example: Dr. Arun"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="notes">
+                    Notes
+                </label>
+
+                <textarea
+                    id="notes"
+                    name="notes"
+                    placeholder="Additional information..."
+                ></textarea>
+
+            </div>
+
+
+            <button type="submit">
+                Add Medical Record
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- Medical History -->
+
+    <section class="card">
+
+        <h2>Medical History</h2>
+
+
+        {% if medical_records %}
+
+            {% for record in medical_records %}
+
+                <div class="record">
+
+                    <h3>
+                        🏥 {{ record.diagnosis }}
+                    </h3>
+
+                    <p>
+                        <strong>Visit Date:</strong>
+                        {{ record.visit_date }}
+                    </p>
+
+                    {% if record.treatment %}
+
+                    <p>
+                        <strong>Treatment:</strong>
+                        {{ record.treatment }}
+                    </p>
+
+                    {% endif %}
+
+
+                    {% if record.veterinarian %}
+
+                    <p>
+                        <strong>Veterinarian:</strong>
+                        {{ record.veterinarian }}
+                    </p>
+
+                    {% endif %}
+
+
+                    {% if record.notes %}
+
+                    <p>
+                        <strong>Notes:</strong>
+                        {{ record.notes }}
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty">
+
+                No medical records found for {{ pet.name }}.
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+</body>
+
+</html>
