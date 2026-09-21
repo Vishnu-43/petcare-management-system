@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Grooming Centers</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .centers {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(280px, 1fr)
+            );
+            gap: 20px;
+        }
+
+        .center-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .center-card h2 {
+            margin-top: 0;
+        }
+
+        .rating {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .address {
+            color: #666;
+        }
+
+        .phone {
+            margin-top: 10px;
+        }
+
+        .view-button {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 15px;
+            background: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🐾 Nearby Grooming Centers</h1>
+
+    <p class="subtitle">
+        Find a grooming center for your pet.
+    </p>
+
+    <div class="centers">
+
+        {% for center in centers %}
+
+        <div class="center-card">
+
+            <h2>{{ center.name }}</h2>
+
+            <div class="rating">
+                ⭐ {{ center.rating }}/5
+            </div>
+
+            <p class="address">
+                📍 {{ center.address }}
+            </p>
+
+            <p class="phone">
+                📞 {{ center.phone }}
+            </p>
+
+            <a
+                href="{{ url_for('grooming_center_details', center_id=center.id) }}"
+                class="view-button"
+            >
+                View Details
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

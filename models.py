@@ -190,3 +190,70 @@ class Appointment(db.Model):
         db.DateTime,
         server_default=db.func.now()
     )
+class GroomingCenter(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    name = db.Column(
+        db.String(150),
+        nullable=False
+    )
+
+    address = db.Column(
+        db.String(255),
+        nullable=False
+    )
+
+    latitude = db.Column(
+        db.Float,
+        nullable=True
+    )
+
+    longitude = db.Column(
+        db.Float,
+        nullable=True
+    )
+
+    phone = db.Column(
+        db.String(20),
+        nullable=True
+    )
+
+    rating = db.Column(
+        db.Float,
+        default=0.0
+    )
+
+    created_at = db.Column(
+        db.DateTime,
+        server_default=db.func.now()
+    )
+
+
+class GroomingService(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    center_id = db.Column(
+        db.Integer,
+        db.ForeignKey("grooming_center.id"),
+        nullable=False
+    )
+
+    service_name = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+    price = db.Column(
+        db.Float,
+        nullable=True
+    )
+
+    description = db.Column(
+        db.Text,
+        nullable=True
+    )
+
+    created_at = db.Column(
+        db.DateTime,
+        server_default=db.func.now()
+    )

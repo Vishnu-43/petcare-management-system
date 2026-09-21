@@ -30,8 +30,15 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 
 
-# Import models
-from models import User, Pet, Vaccination, MedicalRecord, Appointment
+from models import (
+    User,
+    Pet,
+    Vaccination,
+    MedicalRecord,
+    Appointment,
+    GroomingCenter,
+    GroomingService,
+)
 
 
 @login_manager.user_loader
@@ -382,6 +389,122 @@ def complete_appointment(appointment_id):
 with app.app_context():
     db.create_all()
 
+@app.route("/add-sample-grooming")
+def add_sample_grooming():
+
+    center1 = GroomingCenter(
+        name="Happy Paws Grooming",
+        address="Perumbavoor",
+        latitude=10.106,
+        longitude=76.473,
+        phone="9876543210",
+        rating=4.6
+    )
+
+    center2 = GroomingCenter(
+        name="Pet Paradise",
+        address="Aluva",
+        latitude=10.107,
+        longitude=76.351,
+        phone="9876543211",
+        rating=4.4
+    )
+
+    center3 = GroomingCenter(
+        name="Paw Care Centre",
+        address="Kochi",
+        latitude=9.931,
+        longitude=76.267,
+        phone="9876543212",
+        rating=4.7
+    )
+
+    db.session.add_all([
+        center1,
+        center2,
+        center3
+    ])
+
+    db.session.commit()
+
+    services = [
+        GroomingService(
+            center_id=center1.id,
+            service_name="Bathing",
+            price=500,
+            description="Basic pet bathing service"
+        ),
+        GroomingService(
+            center_id=center1.id,
+            service_name="Haircut",
+            price=700,
+            description="Professional pet haircut"
+        ),
+        GroomingService(
+            center_id=center1.id,
+            service_name="Nail Trimming",
+            price=200,
+            description="Pet nail trimming"
+        ),
+
+        GroomingService(
+            center_id=center2.id,
+            service_name="Bathing",
+            price=600,
+            description="Pet bathing and cleaning"
+        ),
+        GroomingService(
+            center_id=center2.id,
+            service_name="Full Grooming",
+            price=1000,
+            description="Complete grooming package"
+        ),
+
+        GroomingService(
+            center_id=center3.id,
+            service_name="Haircut",
+            price=800,
+            description="Professional haircut"
+        ),
+        GroomingService(
+            center_id=center3.id,
+            service_name="Full Grooming",
+            price=1200,
+            description="Complete pet grooming"
+        )
+    ]
+
+    db.session.add_all(services)
+    db.session.commit()
+
+    return "Sample grooming centers and services added successfully!"
+
+@app.route("/grooming-centers")
+@login_required
+def grooming_centers():
+
+    centers = GroomingCenter.query.all()
+
+    return render_template(
+        "grooming_centers.html",
+        centers=centers
+    )
+
+@app.route("/grooming-centers/<int:center_id>")
+@login_required
+def grooming_center_details(center_id):
+
+    center = GroomingCenter.query.get_or_404(center_id)
+
+    services = GroomingService.query.filter_by(
+        center_id=center.id
+    ).all()
+
+    return render_template(
+        "grooming_center_details.html",
+        center=center,
+        services=services
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
