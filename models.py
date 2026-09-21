@@ -198,6 +198,22 @@ class GroomingCenter(db.Model):
         nullable=False
     )
 
+    owner_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id"),
+        nullable=True
+    )
+
+    owner_photo = db.Column(
+        db.String(255),
+        nullable=True
+    )
+
+    center_image = db.Column(
+        db.String(255),
+        nullable=True
+    )
+
     address = db.Column(
         db.String(255),
         nullable=False
@@ -218,6 +234,31 @@ class GroomingCenter(db.Model):
         nullable=True
     )
 
+    description = db.Column(
+        db.Text,
+        nullable=True
+    )
+
+    opening_hours = db.Column(
+        db.String(255),
+        nullable=True
+    )
+
+    verification_document = db.Column(
+        db.String(255),
+        nullable=True
+    )
+
+    verification_status = db.Column(
+        db.String(20),
+        default="Pending"
+    )
+
+    rejection_reason = db.Column(
+        db.Text,
+        nullable=True
+    )
+
     rating = db.Column(
         db.Float,
         default=0.0
@@ -228,6 +269,75 @@ class GroomingCenter(db.Model):
         server_default=db.func.now()
     )
 
+class VeterinarianProfile(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id"),
+        nullable=False,
+        unique=True
+    )
+
+    profile_photo = db.Column(
+        db.String(255),
+        nullable=True
+    )
+
+    qualification = db.Column(
+        db.String(150),
+        nullable=True
+    )
+
+    registration_number = db.Column(
+        db.String(100),
+        nullable=True
+    )
+
+    specialization = db.Column(
+        db.String(100),
+        nullable=True
+    )
+
+    experience_years = db.Column(
+        db.Integer,
+        nullable=True
+    )
+
+    clinic_name = db.Column(
+        db.String(150),
+        nullable=True
+    )
+
+    clinic_address = db.Column(
+        db.String(255),
+        nullable=True
+    )
+
+    phone = db.Column(
+        db.String(20),
+        nullable=True
+    )
+
+    verification_document = db.Column(
+        db.String(255),
+        nullable=True
+    )
+
+    verification_status = db.Column(
+        db.String(20),
+        default="Pending"
+    )
+
+    rejection_reason = db.Column(
+        db.Text,
+        nullable=True
+    )
+
+    created_at = db.Column(
+        db.DateTime,
+        server_default=db.func.now()
+    )
 
 class GroomingService(db.Model):
     id = db.Column(db.Integer, primary_key=True)

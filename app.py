@@ -38,6 +38,7 @@ from models import (
     Appointment,
     GroomingCenter,
     GroomingService,
+    VeterinarianProfile,
 )
 
 
