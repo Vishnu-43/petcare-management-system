@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import (
@@ -5,11 +6,10 @@ from flask_login import (
     login_user,
     logout_user,
     login_required,
-    current_user
+    current_user,
 )
-
+from datetime import datetime
 from extensions import db
-
 
 app = Flask(__name__)
 
@@ -95,10 +95,7 @@ def login():
 
         user = User.query.filter_by(email=email).first()
 
-        if user and check_password_hash(
-            user.password_hash,
-            password
-        ):
+        if user and check_password_hash(user.password_hash, password):
             login_user(user)
 
             return redirect(url_for("dashboard"))
@@ -115,15 +112,10 @@ def login():
 @login_required
 def dashboard():
 
-    pets = Pet.query.filter_by(
-        user_id=current_user.id
-    ).all()
+    pets = Pet.query.filter_by(user_id=current_user.id).all()
 
-    return render_template(
-        "dashboard.html",
-        pets=pets
-    )
-    
+    return render_template("dashboard.html", pets=pets)
+
 
 @app.route("/logout")
 @login_required
@@ -132,6 +124,7 @@ def logout():
     logout_user()
 
     return redirect(url_for("login"))
+
 
 @app.route("/pets/add", methods=["GET", "POST"])
 @login_required
@@ -153,7 +146,7 @@ def add_pet():
             breed=breed,
             gender=gender,
             date_of_birth=date_of_birth,
-            weight=float(weight) if weight else None
+            weight=float(weight) if weight else None,
         )
 
         db.session.add(new_pet)
@@ -162,6 +155,7 @@ def add_pet():
         return redirect(url_for("dashboard"))
 
     return render_template("add_pet.html")
+
 
 @app.route("/pets/<int:pet_id>")
 @login_required
@@ -172,11 +166,9 @@ def pet_profile(pet_id):
         user_id=current_user.id
     ).first_or_404()
 
-    return render_template(
-        "pet_profile.html",
-        pet=pet
-    )
- 
+    return render_template("pet_profile.html", pet=pet)
+
+
 @app.route("/pets/<int:pet_id>/vaccinations", methods=["GET", "POST"])
 @login_required
 def vaccinations(pet_id):
@@ -198,7 +190,7 @@ def vaccinations(pet_id):
             vaccine_name=vaccine_name,
             vaccination_date=vaccination_date,
             next_due_date=next_due_date,
-            notes=notes
+            notes=notes,
         )
 
         db.session.add(new_vaccination)
@@ -208,18 +200,20 @@ def vaccinations(pet_id):
             url_for("vaccinations", pet_id=pet.id)
         )
 
-    vaccination_records = Vaccination.query.filter_by(
-        pet_id=pet.id
-    ).order_by(
-        Vaccination.vaccination_date.desc()
-    ).all()
+    vaccination_records = (
+        Vaccination.query
+        .filter_by(pet_id=pet.id)
+        .order_by(Vaccination.vaccination_date.desc())
+        .all()
+    )
 
     return render_template(
         "vaccinations.html",
         pet=pet,
         vaccinations=vaccination_records
     )
- 
+
+
 @app.route("/pets/<int:pet_id>/medical-records", methods=["GET", "POST"])
 @login_required
 def medical_records(pet_id):
@@ -243,7 +237,7 @@ def medical_records(pet_id):
             diagnosis=diagnosis,
             treatment=treatment,
             veterinarian=veterinarian,
-            notes=notes
+            notes=notes,
         )
 
         db.session.add(new_record)
@@ -253,17 +247,20 @@ def medical_records(pet_id):
             url_for("medical_records", pet_id=pet.id)
         )
 
-    medical_records_list = MedicalRecord.query.filter_by(
-        pet_id=pet.id
-    ).order_by(
-        MedicalRecord.visit_date.desc()
-    ).all()
+    medical_records_list = (
+        MedicalRecord.query
+        .filter_by(pet_id=pet.id)
+        .order_by(MedicalRecord.visit_date.desc())
+        .all()
+    )
 
     return render_template(
         "medical_records.html",
         pet=pet,
         medical_records=medical_records_list
     )
+
+
 @app.route("/pets/<int:pet_id>/appointments", methods=["GET", "POST"])
 @login_required
 def appointments(pet_id):
@@ -287,7 +284,7 @@ def appointments(pet_id):
             appointment_time=appointment_time,
             appointment_type=appointment_type,
             veterinarian=veterinarian,
-            notes=notes
+            notes=notes,
         )
 
         db.session.add(new_appointment)
@@ -297,18 +294,54 @@ def appointments(pet_id):
             url_for("appointments", pet_id=pet.id)
         )
 
-    appointment_records = Appointment.query.filter_by(
+    # Get all appointments for this pet
+    all_appointments = Appointment.query.filter_by(
         pet_id=pet.id
-    ).order_by(
-        Appointment.appointment_date.desc()
     ).all()
+
+    upcoming_appointments = []
+    appointment_history = []
+
+    now = datetime.now()
+
+    for appointment in all_appointments:
+
+        try:
+            appointment_datetime = datetime.strptime(
+                f"{appointment.appointment_date} {appointment.appointment_time}",
+                "%Y-%m-%d %H:%M"
+            )
+
+            if (
+                appointment_datetime >= now
+                and appointment.status == "Scheduled"
+            ):
+                upcoming_appointments.append(appointment)
+            else:
+                appointment_history.append(appointment)
+
+        except ValueError:
+            appointment_history.append(appointment)
+
+    # Sort upcoming appointments from nearest to latest
+    upcoming_appointments.sort(
+        key=lambda a: (a.appointment_date, a.appointment_time)
+    )
+
+    # Sort history from latest to oldest
+    appointment_history.sort(
+        key=lambda a: (a.appointment_date, a.appointment_time),
+        reverse=True
+    )
 
     return render_template(
         "appointments.html",
         pet=pet,
-        appointments=appointment_records
+        upcoming_appointments=upcoming_appointments,
+        appointments=appointment_history,
     )
-       
+
+
 # Create database tables
 with app.app_context():
     db.create_all()
