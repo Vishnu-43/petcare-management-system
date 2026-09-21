@@ -358,6 +358,24 @@ def cancel_appointment(appointment_id):
     return redirect(
         url_for("appointments", pet_id=pet.id)
     )
+@app.route("/appointments/<int:appointment_id>/complete", methods=["POST"])
+@login_required
+def complete_appointment(appointment_id):
+
+    appointment = Appointment.query.get_or_404(appointment_id)
+
+    pet = Pet.query.filter_by(
+        id=appointment.pet_id,
+        user_id=current_user.id
+    ).first_or_404()
+
+    appointment.status = "Completed"
+
+    db.session.commit()
+
+    return redirect(
+        url_for("appointments", pet_id=pet.id)
+    )
 
 
 # Create database tables

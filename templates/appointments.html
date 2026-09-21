@@ -237,6 +237,14 @@
                             Cancel Appointment
                         </button>
                     </form>
+                    <form
+                        method="POST"
+                        action="{{ url_for('complete_appointment', appointment_id=appointment.id) }}"
+                    >
+                        <button type="submit">
+                            Complete Appointment
+                        </button>
+                    </form>
 
                 </div>
 
