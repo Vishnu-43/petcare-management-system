@@ -340,6 +340,24 @@ def appointments(pet_id):
         upcoming_appointments=upcoming_appointments,
         appointments=appointment_history,
     )
+@app.route("/appointments/<int:appointment_id>/cancel", methods=["POST"])
+@login_required
+def cancel_appointment(appointment_id):
+
+    appointment = Appointment.query.get_or_404(appointment_id)
+
+    pet = Pet.query.filter_by(
+        id=appointment.pet_id,
+        user_id=current_user.id
+    ).first_or_404()
+
+    appointment.status = "Cancelled"
+
+    db.session.commit()
+
+    return redirect(
+        url_for("appointments", pet_id=pet.id)
+    )
 
 
 # Create database tables

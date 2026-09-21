@@ -229,6 +229,14 @@
                             {{ appointment.status }}
                         </span>
                     </p>
+                    <form
+                        method="POST"
+                        action="{{ url_for('cancel_appointment', appointment_id=appointment.id) }}"
+                    >
+                        <button type="submit">
+                            Cancel Appointment
+                        </button>
+                    </form>
 
                 </div>
 
