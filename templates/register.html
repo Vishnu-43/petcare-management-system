@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,7 +43,8 @@
             font-weight: bold;
         }
 
-        input {
+        input,
+        select {
             width: 100%;
             padding: 11px;
             margin-bottom: 18px;
@@ -121,6 +123,14 @@
             required
         >
 
+        <label for="role">Account Type</label>
+        <select id="role" name="role" required>
+            <option value="">Select account type</option>
+            <option value="client">Client</option>
+            <option value="veterinarian">Veterinarian</option>
+            <option value="grooming_provider">Grooming Provider</option>
+        </select>
+
         <label for="password">Password</label>
         <input
             type="password"
@@ -147,7 +157,7 @@
 
     <div class="login-link">
         Already have an account?
-        <a href="#">Login</a>
+        <a href="/login">Login</a>
     </div>
 
 </div>

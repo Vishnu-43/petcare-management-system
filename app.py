@@ -51,7 +51,6 @@ def load_user(user_id):
 def home():
     return "PetCare Management System is running!"
 
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
@@ -61,11 +60,18 @@ def register():
         email = request.form["email"]
         password = request.form["password"]
         confirm_password = request.form["confirm_password"]
+        role = request.form["role"]
 
         if password != confirm_password:
             return render_template(
                 "register.html",
                 error="Passwords do not match."
+            )
+
+        if role not in ["client", "veterinarian", "grooming_provider"]:
+            return render_template(
+                "register.html",
+                error="Please select a valid account type."
             )
 
         existing_user = User.query.filter_by(email=email).first()
@@ -82,15 +88,63 @@ def register():
             name=name,
             email=email,
             password_hash=password_hash,
-            role="user"
+            role=role
         )
 
         db.session.add(new_user)
         db.session.commit()
+        
+        if role == "veterinarian":
+            return redirect(
+                url_for("veterinarian_registration", user_id=new_user.id)
+        )
 
         return redirect(url_for("login"))
 
     return render_template("register.html")
+
+@app.route("/veterinarian-registration/<int:user_id>", methods=["GET", "POST"])
+def veterinarian_registration(user_id):
+
+    user = User.query.get_or_404(user_id)
+
+    if request.method == "POST":
+
+        profile_photo = request.form["profile_photo"]
+        qualification = request.form["qualification"]
+        registration_number = request.form["registration_number"]
+        specialization = request.form["specialization"]
+        experience_years = request.form["experience_years"]
+        clinic_name = request.form["clinic_name"]
+        clinic_address = request.form["clinic_address"]
+        phone = request.form["phone"]
+        verification_document = request.form["verification_document"]
+
+        veterinarian = VeterinarianProfile(
+            user_id=user.id,
+            profile_photo=profile_photo,
+            qualification=qualification,
+            registration_number=registration_number,
+            specialization=specialization,
+            experience_years=experience_years,
+            clinic_name=clinic_name,
+            clinic_address=clinic_address,
+            phone=phone,
+            verification_document=verification_document,
+            verification_status="Pending"
+        )
+
+        db.session.add(veterinarian)
+        db.session.commit()
+
+        return redirect(url_for("login"))
+
+    return render_template(
+        "veterinarian_registration.html",
+        user=user
+    )
+
+
 
 
 @app.route("/login", methods=["GET", "POST"])
