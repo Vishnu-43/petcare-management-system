@@ -279,6 +279,10 @@ class VeterinarianProfile(db.Model):
         unique=True
     )
 
+    user = db.relationship("User")
+
+
+
     profile_photo = db.Column(
         db.String(255),
         nullable=True

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - PetCare</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f8f5;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .welcome {
+            color: #666;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        .vet-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .vet-card p {
+            margin: 8px 0;
+            color: #555;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .pending {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: #fff3cd;
+            color: #856404;
+            font-weight: bold;
+        }
+
+        .empty {
+            color: #777;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>Admin Dashboard</h1>
+
+        <p class="welcome">
+            Welcome, Admin. Review provider registrations below.
+        </p>
+    </div>
+
+
+    <!-- Veterinarian Verification -->
+
+    <div class="section">
+
+        <h2>Veterinarian Registrations</h2>
+
+        {% if pending_veterinarians %}
+
+            {% for vet in pending_veterinarians %}
+
+                <div class="vet-card">
+
+                    <p>
+                        <span class="label">Name:</span>
+                        {{ vet.user.name if vet.user else "N/A" }}
+                    </p>
+
+                    <p>
+                        <span class="label">Qualification:</span>
+                        {{ vet.qualification or "N/A" }}
+                    </p>
+
+                    <p>
+                        <span class="label">Registration Number:</span>
+                        {{ vet.registration_number or "N/A" }}
+                    </p>
+
+                    <p>
+                        <span class="label">Specialization:</span>
+                        {{ vet.specialization or "N/A" }}
+                    </p>
+
+                    <p>
+                        <span class="label">Experience:</span>
+                        {{ vet.experience_years or "N/A" }} years
+                    </p>
+
+                    <p>
+                        <span class="label">Clinic:</span>
+                        {{ vet.clinic_name or "N/A" }}
+                    </p>
+
+                    <p>
+                        <span class="label">Clinic Address:</span>
+                        {{ vet.clinic_address or "N/A" }}
+                    </p>
+
+                    <p>
+                        <span class="label">Phone:</span>
+                        {{ vet.phone or "N/A" }}
+                    </p>
+
+                    <p>
+                        <span class="label">Verification Status:</span>
+                        <span class="pending">
+                            {{ vet.verification_status }}
+                        </span>
+                    </p>                  
+                    <form
+                        method="POST"
+                        action="{{ url_for('approve_veterinarian', vet_id=vet.id) }}"
+                        style="margin-top: 15px;"
+                    >
+                        <button
+                            type="submit"
+                            style="
+                                padding: 10px 18px;
+                                border: none;
+                                border-radius: 6px;
+                                background: #2e7d32;
+                                color: white;
+                                cursor: pointer;
+                                font-size: 14px;
+                            "
+                        >
+                            Approve
+                        </button>
+                    </form>
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p class="empty">
+                No pending veterinarian registrations.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>
