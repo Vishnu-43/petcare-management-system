@@ -173,6 +173,23 @@
                             Approve
                         </button>
                     </form>
+                    <form method="POST" action="{{ url_for('reject_veterinarian', vet_id=vet.id) }}" style="margin-top: 10px;">
+                        <input
+                            type="text"
+                            name="rejection_reason"
+                            placeholder="Enter rejection reason"
+                            required
+                            style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin-bottom: 10px;"
+                        >
+
+                        <button
+                            type="submit"
+                            style="padding: 10px 18px; border: none; border-radius: 6px; background: #c62828; color: white; cursor: pointer; font-size: 14px;"
+                        >
+                            Reject
+                        </button>
+
+                    </form>
                 </div>
 
             {% endfor %}

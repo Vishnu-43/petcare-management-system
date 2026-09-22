@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Application Status - PetCare</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7f9;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .reason {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #c62828;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 18px;
+            background: #2e7d32;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Veterinarian Application</h1>
+
+    {% if veterinarian.verification_status == "Pending" %}
+
+        <div class="status pending">
+            Status: Pending
+        </div>
+
+        <p>
+            Your veterinarian registration has been submitted successfully.
+            Please wait for the administrator to review your application.
+        </p>
+
+    {% elif veterinarian.verification_status == "Approved" %}
+
+        <div class="status approved">
+            Status: Approved
+        </div>
+
+        <p>
+            Congratulations! Your veterinarian account has been approved.
+        </p>
+
+        <a href="{{ url_for('dashboard') }}" class="back">
+            Go to Dashboard
+        </a>
+
+    {% elif veterinarian.verification_status == "Rejected" %}
+
+        <div class="status rejected">
+            Status: Rejected
+        </div>
+
+        <p>
+            Your veterinarian registration was rejected by the administrator.
+        </p>
+
+        {% if veterinarian.rejection_reason %}
+            <div class="reason">
+                <strong>Reason:</strong><br>
+                {{ veterinarian.rejection_reason }}
+            </div>
+        {% endif %}
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

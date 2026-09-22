@@ -207,7 +207,13 @@ def login():
             return redirect(url_for("admin_dashboard"))
 
         elif user.role == "veterinarian":
-            return redirect(url_for("dashboard"))
+            veterinarian = VeterinarianProfile.query.filter_by(
+                user_id=user.id
+            ).first()
+
+            if veterinarian and veterinarian.verification_status == "Approved":
+                return redirect(url_for("dashboard"))
+            return redirect(url_for("veterinarian_status"))
 
         elif user.role == "grooming_provider":
             return redirect(url_for("dashboard"))
@@ -647,7 +653,42 @@ def approve_veterinarian(vet_id):
 
     return redirect(url_for("admin_dashboard"))
 
+@app.route("/admin/reject-veterinarian/<int:vet_id>", methods=["POST"])
+@login_required
+def reject_veterinarian(vet_id):
 
+    if current_user.role != "admin":
+        return "Access Denied", 403
+
+    veterinarian = VeterinarianProfile.query.get_or_404(vet_id)
+
+    rejection_reason = request.form["rejection_reason"]
+
+    veterinarian.verification_status = "Rejected"
+    veterinarian.rejection_reason = rejection_reason
+
+    db.session.commit()
+
+    return redirect(url_for("admin_dashboard"))
+
+@app.route("/veterinarian-status")
+@login_required
+def veterinarian_status():
+
+    if current_user.role != "veterinarian":
+        return "Access Denied", 403
+
+    veterinarian = VeterinarianProfile.query.filter_by(
+        user_id=current_user.id
+    ).first()
+
+    if not veterinarian:
+        return "Veterinarian profile not found.", 404
+
+    return render_template(
+        "veterinarian_status.html",
+        veterinarian=veterinarian
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
