@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Grooming Provider Registration - PetCare</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f8f5;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 13px;
+            border: none;
+            border-radius: 6px;
+            background: #2e7d32;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #256b29;
+        }
+
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            color: #2e7d32;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Grooming Provider Registration</h1>
+
+    <p class="subtitle">
+        Complete your grooming center details for verification.
+    </p>
+
+    <form method="POST">
+
+        <label for="owner_photo">Owner Photo</label>
+        <input
+            type="text"
+            id="owner_photo"
+            name="owner_photo"
+            placeholder="Example: owner.jpg"
+            required
+        >
+
+        <label for="center_name">Grooming Center Name</label>
+        <input
+            type="text"
+            id="center_name"
+            name="center_name"
+            placeholder="Example: Happy Paws Grooming Center"
+            required
+        >
+
+        <label for="center_image">Grooming Center Image</label>
+        <input
+            type="text"
+            id="center_image"
+            name="center_image"
+            placeholder="Example: grooming_center.jpg"
+            required
+        >
+
+        <label for="address">Center Address</label>
+        <textarea
+            id="address"
+            name="address"
+            placeholder="Enter the complete grooming center address"
+            required
+        ></textarea>
+
+        <label for="phone">Phone Number</label>
+        <input
+            type="tel"
+            id="phone"
+            name="phone"
+            placeholder="Example: 9876543210"
+            required
+        >
+
+        <label for="description">About the Grooming Center</label>
+        <textarea
+            id="description"
+            name="description"
+            placeholder="Describe your grooming services and facilities"
+            required
+        ></textarea>
+
+        <label for="opening_hours">Opening Hours</label>
+        <input
+            type="text"
+            id="opening_hours"
+            name="opening_hours"
+            placeholder="Example: 9:00 AM - 7:00 PM"
+            required
+        >
+
+        <label for="verification_document">Verification Document</label>
+        <input
+            type="text"
+            id="verification_document"
+            name="verification_document"
+            placeholder="Example: license.pdf"
+            required
+        >
+
+        <button type="submit">
+            Submit for Verification
+        </button>
+
+    </form>
+
+    <div class="info">
+        <strong>Verification Process</strong><br>
+        Your grooming provider details will be reviewed by the
+        PetCare administrator. Until approval, your grooming center
+        will remain pending and will not be publicly listed.
+    </div>
+
+</div>
+
+</body>
+</html>

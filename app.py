@@ -98,6 +98,10 @@ def register():
             return redirect(
                 url_for("veterinarian_registration", user_id=new_user.id)
         )
+        if role == "grooming_provider":
+            return redirect(
+        url_for("grooming_provider_registration", user_id=new_user.id)
+        )
 
         return redirect(url_for("login"))
 
@@ -141,6 +145,45 @@ def veterinarian_registration(user_id):
 
     return render_template(
         "veterinarian_registration.html",
+        user=user
+    )
+
+@app.route("/grooming-provider-registration/<int:user_id>", methods=["GET", "POST"])
+def grooming_provider_registration(user_id):
+
+    user = User.query.get_or_404(user_id)
+
+    if request.method == "POST":
+
+        owner_photo = request.form["owner_photo"]
+        center_name = request.form["center_name"]
+        center_image = request.form["center_image"]
+        address = request.form["address"]
+        phone = request.form["phone"]
+        description = request.form["description"]
+        opening_hours = request.form["opening_hours"]
+        verification_document = request.form["verification_document"]
+
+        grooming_center = GroomingCenter(
+            owner_id=user.id,
+            owner_photo=owner_photo,
+            name=center_name,
+            center_image=center_image,
+            address=address,
+            phone=phone,
+            description=description,
+            opening_hours=opening_hours,
+            verification_document=verification_document,
+            verification_status="Pending"
+        )
+
+        db.session.add(grooming_center)
+        db.session.commit()
+
+        return redirect(url_for("login"))
+
+    return render_template(
+        "grooming_provider_registration.html",
         user=user
     )
 
